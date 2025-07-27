@@ -1,53 +1,60 @@
 # RemoteOK Job Scraper
 
-Scrape data from [RemoteOK](https://remoteok.com/) easily with RemoteOK Job Scraper
+Scrape data from [RemoteOK](https://remoteok.com/) easily with this scraper. The results are saved in a `JOBS.md` file, grouped by company and sorted by date.
 
-## How to use
+## How to Use
 
-In order to use RemoteOK Job Scraper you need to go to web site and do approriate search you want to scrape. When you are satisfied with search copy URL from browser and put it in `searchUrls` field. With that set you can start scraping your search with the actor.
+### Local Execution
 
-### Example
+1.  **Install dependencies:**
 
-If we want to scrape jobs for `java` and to get 500 results input would look like this:
+    ```bash
+    bun install
+    ```
+
+2.  **Run the scraper:**
+
+    ```bash
+    bun start
+    ```
+
+    This will start the scraping process. Once finished, you will find the results in the `JOBS.md` file.
+
+### Apify Platform
+
+To use the RemoteOK Job Scraper on the Apify platform, you need to configure the input in the Apify Console. Go to the actor's page, and in the `Input` tab, specify the search URLs and the maximum number of listings you want to scrape.
+
+#### Example Input
+
+If you want to scrape the latest 500 `java` jobs, the input would look like this:
 
 ```json
 {
   "searchUrls": [
-        {
-            "url": "https://remoteok.com/remote-java-jobs?order_by=date"
-        }
-    ]
+    {
+      "url": "https://remoteok.com/remote-java-jobs?order_by=date"
+    }
+  ],
   "maxNumberOfListings": 500
 }
 ```
 
-## Data Output Example
+## Data Output
 
-```json
-[
-  {
-    "id": "112230",
-    "company": "SportyBet",
-    "url": "https://remoteok.com/remote-jobs/112230-remote-backend-engineer-sportybet",
-    "title": "Backend Engineer",
-    "tags": ["Engineer", "Senior", "Finance"],
-    "time": "2022-08-26T11:24:54+00:00",
-    "locations": ["🇪🇺 Europe", "💃 Latin America", "🇨🇦 Canada", "🇷🇺 Russia", "🇺🇦 Ukraine"],
-    "minSalary": "$40k",
-    "maxSalary": "$80k",
-    "offset": "1"
-  }
-]
+The scraper generates a `JOBS.md` file with the scraped job listings. The jobs are grouped by company and sorted by the most recent date. The output from the Apify platform is stored in a dataset, which can be downloaded in various formats (JSON, CSV, XML, etc.).
+
+### Example `JOBS.md` entry:
+
+```markdown
+## Company Name (1)
+
+### [Job Title](https://remoteok.com/remote-jobs/12345-example-job)
+**Tags:** Tag1, Tag2
+**Location:** Location1, Location2
+**Salary:** $50k - $100k
+*Posted on: Mon Aug 29 2022*
 ```
-
-## RemoteOK data output
-
-The output from RemoteOK Job Scraper is stored in the dataset. After the run is finished, you can download the dataset in various data formats (JSON, CSV, XML, RSS, HTML Table).
-
-## How much does it cost to scrape RemoteOK?
-
-Running RemoteOK Job Scraper once will get you 1,000 results for less than USD 1 in Apify platform credits. For more details about the plans offer, platform credits, and usage, see the platform pricing [page](https://apify.com/pricing/actors).
 
 ## Support
 
-For more custom/simplify outputs or Bug report please contact the developer (me) or report an issue.
+For custom outputs, bug reports, or any other issues, please contact the developer or open an issue in the repository.

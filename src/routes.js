@@ -2,7 +2,7 @@ import { Dataset, createPlaywrightRouter } from 'crawlee';
 
 const getAtt = (el, attName) => el.attributes.find(x => x.name === attName)?.value;
 
-export const createRouter = ({ maxOffset }) => {
+export const createRouter = ({ maxOffset, jobIds }) => {
   const router = createPlaywrightRouter();
 
   const getJobData = (el, $) => {
@@ -36,16 +36,16 @@ export const createRouter = ({ maxOffset }) => {
     for (let i = 0; i < locationsEl.length; i += 1) {
       const location = locationsEl[i]?.firstChild?.data?.trim();
 
-      if (location.includes('💰')) {
+      if (location && location.includes('💰')) {
         const moneyText = location.replace('💰 ', '').replace('*', '').split(' - ');
         if (moneyText.length === 2) {
           [minSalary, maxSalary] = moneyText;
         } else if (moneyText.length === 1) {
           [minSalary] = moneyText;
         }
-      } else if (location.includes('⏰')) {
+      } else if (location && location.includes('⏰')) {
         contractType = location.replace('⏰', '').trim();
-      } else {
+      } else if (location) {
         locations.push(location);
       }
     }
@@ -83,6 +83,10 @@ export const createRouter = ({ maxOffset }) => {
       const job = getJobData(el, $);
       job.offset = currentOffset;
 
+      if (jobIds.has(job.id)) {
+        return;
+      }
+
       if (currentOffset > maxOffset) {
         // we got number of jobs that we wanted
         return;
@@ -95,6 +99,7 @@ export const createRouter = ({ maxOffset }) => {
         job.description = $(`tr.expand-${job.id} div.markdown`).text().trim();
       }
 
+      jobIds.add(job.id);
       jobs.push(job);
     });
 

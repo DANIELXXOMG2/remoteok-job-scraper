@@ -18,7 +18,7 @@ module.exports = {
   },
   rules: {
     'max-len': ['error', { code: 120 }],
-    'prettier/prettier': ['error', prettierOptions],
+    'prettier/prettier': ['error', { ...prettierOptions, endOfLine: 'auto' }],
     'import/prefer-default-export': 'off',
     'import/extensions': 'off',
   },

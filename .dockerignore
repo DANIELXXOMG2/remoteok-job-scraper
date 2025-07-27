@@ -1,11 +1,27 @@
-# configurations
-.idea
+# Git and Docker
+.git
+.gitignore
+Dockerfile
+.dockerignore
 
-# crawlee and apify storage folders
+# Project and editor configs
+.idea
+.vscode
+.trae
+
+# Dependencies and build outputs
+node_modules
 apify_storage
 crawlee_storage
 storage
-examples
 
-# installed files
-node_modules
+# Documentation and local outputs
+README.md
+JOBS.md
+
+# Lockfiles
+bun.lock
+package-lock.json
+
+# Apify config
+apify.json

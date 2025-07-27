@@ -1,10 +1,9 @@
 import { scrape } from './crawler.js';
-
-const startUrls = ['https://remoteok.com/'];
+import { config } from '../config.js';
 
 await scrape({
-  maxConcurrency: 1,
-  proxy: undefined,
-  urls: startUrls,
-  maxNumberOfListings: 100,
+  maxConcurrency: config.maxConcurrency,
+  proxy: config.proxy,
+  urls: config.startUrls,
+  maxNumberOfListings: config.maxNumberOfListings,
 });

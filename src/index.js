@@ -1,7 +1,9 @@
 import { Actor } from 'apify';
-import { log } from 'crawlee';
+import { log, Dataset } from 'crawlee';
+import { writeFile } from 'fs/promises';
 import { scrape } from './crawler.js';
 import { buildStartRequests, isRemoteOkUrl } from './urls.js';
+import { createMarkdown } from './markdown.js';
 
 // Initialize the Apify SDK
 await Actor.init();
@@ -28,6 +30,14 @@ allUrls
     }
   });
 
-await scrape({ urls, maxNumberOfListings, maxConcurrency, proxy });
+const jobIds = new Set();
+
+await scrape({ urls, maxNumberOfListings, maxConcurrency, proxy, jobIds });
+
+const dataset = await Dataset.open();
+const items = await dataset.getData();
+const markdown = await createMarkdown(items.items);
+
+await writeFile('JOBS.md', markdown);
 
 await Actor.exit();
