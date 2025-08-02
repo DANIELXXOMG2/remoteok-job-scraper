@@ -12,6 +12,11 @@ export const createRouter = ({ maxOffset, jobIds }) => {
     let title = '';
     const tags = [];
     let time = '';
+
+    // Validate required fields
+    if (!id || !company || !url) {
+      return null;
+    }
     $('h2', el).each((_, h2) => {
       title = h2.firstChild?.data?.trim();
     });
@@ -81,6 +86,12 @@ export const createRouter = ({ maxOffset, jobIds }) => {
     await $('tr.job').map(async (_, el) => {
       currentOffset = pageOffset + parseInt($(el).attr('data-offset'), 10);
       const job = getJobData(el, $);
+      
+      // Skip if job data is invalid
+      if (!job) {
+        return;
+      }
+      
       job.offset = currentOffset;
 
       if (jobIds.has(job.id)) {

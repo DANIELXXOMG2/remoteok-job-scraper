@@ -3,6 +3,7 @@ import { chromium } from 'playwright-extra';
 import stealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { createRouter } from './routes.js';
 
+// Configure stealth plugin to avoid detection
 chromium.use(stealthPlugin());
 
 export const scrape = async ({ urls, maxNumberOfListings, maxConcurrency = 1, proxy, jobIds }) => {

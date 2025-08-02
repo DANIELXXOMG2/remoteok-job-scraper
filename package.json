@@ -37,6 +37,7 @@
     "start-dev": "node src/main.js",
     "lint": "eslint --fix .",
     "lint-check": "eslint .",
+    "clean": "rm -rf .trae/ storage/ dist/ build/ out/ *.log",
     "test": "echo \"Error: oops, the actor has no tests yet, sad!\" && exit 1"
   },
   "author": "ivan.vasiljevic@hotmail.com",
