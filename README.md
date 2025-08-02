@@ -9,13 +9,13 @@ Scrape data from [RemoteOK](https://remoteok.com/) easily with this scraper. The
 1.  **Install dependencies:**
 
     ```bash
-    bun install
+    npm install
     ```
 
 2.  **Run the scraper:**
 
     ```bash
-    bun start
+    npm start
     ```
 
     This will start the scraping process. Once finished, you will find the results in the `JOBS.md` file.
