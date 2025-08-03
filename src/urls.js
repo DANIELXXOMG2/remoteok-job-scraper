@@ -1,7 +1,7 @@
 import { gotScraping } from 'crawlee';
 import csvtojson from 'csvtojson';
 
-export const isRemoteOkUrl = url => url.startsWith('https://remoteok.com/');
+export const isRemoteOkUrl = url => url && typeof url === 'string' && url.startsWith('https://remoteok.com/');
 
 export const getStartRequestsFromUrl = async startUrl => {
   let sourceUrl = startUrl.requestsFromUrl;

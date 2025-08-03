@@ -11,24 +11,36 @@ export const scrape = async ({ urls, maxNumberOfListings, maxConcurrency = 1, pr
   const crawler = new PlaywrightCrawler({
     launchContext: {
       launcher: chromium,
-      // Here you can set options that are passed to the playwright .launch() function.
+      // Optimized launch options for better performance
       launchOptions: {
         headless: true,
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--no-first-run',
+          '--no-zygote',
+          '--disable-gpu',
+          '--memory-pressure-off'
+        ],
       },
     },
     proxyConfiguration: proxy,
     requestHandler: router,
-    requestHandlerTimeoutSecs: 300,
-    maxRequestRetries: 3,
+    requestHandlerTimeoutSecs: 180, // Reduced timeout
+    maxRequestRetries: 2, // Reduced retries
     maxConcurrency,
     useSessionPool: true,
-    persistCookiesPerSession: true,
+    persistCookiesPerSession: false, // Disabled to save memory
     sessionPoolOptions: {
-      maxPoolSize: 50,
+      maxPoolSize: Math.min(20, maxConcurrency * 5), // Optimized pool size
       sessionOptions: {
-        maxUsageCount: 1,
+        maxUsageCount: 3, // Increased reuse
       },
     },
+    // Additional optimizations
+    keepAlive: false,
   });
 
   await crawler.run(urls);

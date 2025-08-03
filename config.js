@@ -1,19 +1,74 @@
-// config.js
+/**
+ * Configuración del Scraper de RemoteOK
+ *
+ * Este archivo contiene todas las configuraciones principales del scraper.
+ * Puedes modificar estos valores según tus necesidades específicas.
+ */
 
 export const config = {
-  // URLs to scrape. You can add more URLs here.
-  startUrls: ['https://remoteok.com/'],
+  // ========================================
+  // CONFIGURACIÓN DE URLs
+  // ========================================
 
-  // Maximum number of job listings to scrape from each URL.
+  /**
+   * URLs a scrapear - Puedes agregar múltiples URLs aquí
+   *
+   * Ejemplos de URLs válidas:
+   * - 'https://remoteok.com/' (todos los trabajos)
+   * - 'https://remoteok.com/remote-javascript-jobs' (trabajos de JavaScript)
+   * - 'https://remoteok.com/remote-python-jobs' (trabajos de Python)
+   * - 'https://remoteok.com/remote-jobs?order_by=date' (ordenados por fecha)
+   */
+  startUrls: [
+    'https://remoteok.com/',
+  ],
+
+  // ========================================
+  // CONFIGURACIÓN DE SCRAPING
+  // ========================================
+
+  /**
+   * Número máximo de trabajos a scrapear por cada URL
+   * Recomendado: 50-200 para uso normal, 500+ para análisis extensos
+   */
   maxNumberOfListings: 100,
 
-  // Proxy configuration
-  // If you want to use proxies, you need to set this to a proxy configuration object.
-  // For example, to use Apify Proxy: proxy: { useApifyProxy: true }
-  // To use your own proxies: proxy:
-  // { proxyUrls: ['http://user:password@proxy1.com:8000', 'http://user:password@proxy2.com:8000'] }
+  /**
+   * Concurrencia máxima del crawler (páginas procesadas simultáneamente)
+   * Recomendado: 2-4 para conexiones estables, 1-2 para conexiones lentas
+   */
+  maxConcurrency: 3,
+
+  // ========================================
+  // CONFIGURACIÓN DE PROXY
+  // ========================================
+
+  /**
+   * Configuración de proxy (opcional)
+   *
+   * Opciones disponibles:
+   * - undefined: Sin proxy (recomendado para uso local)
+   * - { useApifyProxy: true }: Usar Apify Proxy (solo en plataforma Apify)
+   * - { proxyUrls: ['http://user:pass@proxy1.com:8000'] }: Proxies personalizados
+   */
   proxy: undefined,
 
-  // Maximum concurrency of the crawler.
-  maxConcurrency: 2,
+  // ========================================
+  // OPTIMIZACIONES DE RENDIMIENTO
+  // ========================================
+
+  /**
+   * Configuraciones avanzadas para optimizar el rendimiento
+   * No modificar a menos que sepas lo que haces
+   */
+  performance: {
+    /** Tamaño de lote para procesamiento de trabajos */
+    batchSize: 25,
+
+    /** Habilitar deduplicación de requests */
+    enableDeduplication: true,
+
+    /** Tamaño máximo de la cola de requests */
+    maxRequestQueueSize: 100,
+  },
 };

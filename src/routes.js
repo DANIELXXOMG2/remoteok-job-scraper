@@ -72,7 +72,14 @@ export const createRouter = ({ maxOffset, jobIds }) => {
   router.addDefaultHandler(async ({ request, log, page, parseWithCheerio, crawler }) => {
     log.info(`Processing page ${request.url}`);
 
-    await page.waitForTimeout(15_000);
+    // Optimized waiting strategy
+    try {
+      await page.waitForSelector('tr.job', { timeout: 10000 });
+    } catch (error) {
+      log.warning('Jobs not found, using fallback timeout');
+      await page.waitForTimeout(5000);
+    }
+    
     const $ = await parseWithCheerio();
 
     let pageOffset = parseInt(new URL(request.url).searchParams.get('offset'), 10) || 0;
@@ -83,36 +90,33 @@ export const createRouter = ({ maxOffset, jobIds }) => {
 
     let currentOffset = 0;
     const jobs = [];
-    await $('tr.job').map(async (_, el) => {
+    const jobElements = $('tr.job').get();
+    
+    // Process jobs synchronously for better performance
+    for (const el of jobElements) {
       currentOffset = pageOffset + parseInt($(el).attr('data-offset'), 10);
+      
+      if (currentOffset > maxOffset) {
+        break; // Early exit when we reach the limit
+      }
+      
       const job = getJobData(el, $);
       
-      // Skip if job data is invalid
-      if (!job) {
-        return;
+      // Skip if job data is invalid or already processed
+      if (!job || jobIds.has(job.id)) {
+        continue;
       }
       
       job.offset = currentOffset;
 
-      if (jobIds.has(job.id)) {
-        return;
-      }
-
-      if (currentOffset > maxOffset) {
-        // we got number of jobs that we wanted
-        return;
-      }
-
-      const description = $(`tr.expand-${job.id} div.html`).text().trim();
-      if (description) {
-        job.description = description;
-      } else {
-        job.description = $(`tr.expand-${job.id} div.markdown`).text().trim();
-      }
+      // Optimized description extraction
+      const descriptionHtml = $(`tr.expand-${job.id} div.html`).text().trim();
+      const descriptionMarkdown = $(`tr.expand-${job.id} div.markdown`).text().trim();
+      job.description = descriptionHtml || descriptionMarkdown || '';
 
       jobIds.add(job.id);
       jobs.push(job);
-    });
+    }
 
     const url = new URL(request.url);
     url.searchParams.set('offset', currentOffset + 1);
