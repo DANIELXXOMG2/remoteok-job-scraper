@@ -24,7 +24,6 @@ export const buildStartRequests = async startUrls => {
   const startRequests = [];
   const awaitUrls = [];
 
-  // eslint-disable-next-line no-restricted-syntax
   for (const startUrl of startUrls) {
     if (startUrl.requestsFromUrl) {
       const startRequestsFromUrl = getStartRequestsFromUrl(startUrl);
