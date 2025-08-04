@@ -21,6 +21,8 @@ export const config = {
    */
   startUrls: [
     'https://remoteok.com/',
+    'https://remoteok.com/remote-javascript-jobs',
+    // 'https://remoteok.com/remote-python-jobs',
   ],
 
   // ========================================
